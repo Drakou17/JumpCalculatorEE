@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class Main {
+	//YO
 	public static double px = 0.0625;
 	public static double playerWidth = 0.6;
 	static PrintWriter jumps;
