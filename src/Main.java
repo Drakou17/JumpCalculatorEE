@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 
 public class Main {
 	//YO
+	//SUP HOW ARE YOU
 	public static double px = 0.0625;
 	public static double playerWidth = 0.6;
 	static PrintWriter jumps;
