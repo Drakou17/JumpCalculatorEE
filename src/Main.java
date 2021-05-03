@@ -45,39 +45,21 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		//calculate();
-		/*Jump pb = null;
-		int pbRun = 0;
-		for (int i = 0; i < 60; i++) {
-			System.out.println(i + " Run Ticks");
-			Movement movement = new Movement()
-										.jump(false, false, true)
-					                    .moveAir(i, false, true, true);
-			Jump jump = new Jump(movement.velX, true, false, true, 0, 0);
-			jump.movementMultiplier = Movement.MovementMultipliers.SNEAKING;
-			jump.calculate();
-			if (jump.jumpsFound && (pb == null || jump.xPB + Jump.px < pb.xPB + Jump.px)) {
-				pb = jump;
-				pbRun = i;
-			}
-			System.out.println();
-		}
-		System.out.println();
-		System.out.println();
-		System.out.println(pbRun);
-		if (pb != null)
-			pb.calculate();*/
-		/*Movement movement = new Movement();
-		movement
-				.move(13, true, false, false)
-				.resetPos()
-				.move(1, true, false, false)
-				.jump(true, false, false)
-				.moveAir(64, true, false, false);
 
-		System.out.println(movement.toStringLast());*/
-		Jump jump = new Jump(0.286281, true, false, true, 0, 0);
-		jump.calculate();
+
+		Vec3 vel = new Vec3();
+		TickList.Input.JumpMovementFactor factor = new TickList.Input.JumpMovementFactor();
+
+		Vec3 pos = TickList.Input.fromInputString("WPJ", 0)
+		                         .updatePosWithVel(new Vec3(), vel, factor);
+
+		TickList.Input input = TickList.Input.fromInputString("WP", 0);
+		input.onGround = false;
+		for (int i = 0; i < 10; i++) {
+			input.updatePosWithVel(pos, vel, factor);
+		}
+
+		System.out.println(pos);
 	}
 
 	public static void calculate() {

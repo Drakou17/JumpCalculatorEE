@@ -2,6 +2,7 @@ public class Movement {
 	private static final double SQRT_2 = Math.sqrt(2);
 	public double velX, velY, velZ;
 	public double x, y, z;
+	public double yaw = 0;
 	public double lastX, lastY, lastZ;
 
 	public Slipperiness currentSlipperiness = Slipperiness.BLOCK;
@@ -124,19 +125,25 @@ public class Movement {
 		return momentum;
 	}
 
+	private double getMomentumZ() {
+		double momentum = velZ * getDrag();
+		if (Math.abs(momentum) < 0.005) return 0;
+		return momentum;
+	}
+
 	private double getDrag() {
 		return 0.91 * lastSlipperiness.value;
 	}
 
 	public enum Slipperiness {
-		AIR(1),
-		BLOCK(0.6),
-		SLIME(0.8),
-		ICE(0.98);
+		AIR(1F),
+		BLOCK(0.6F),
+		SLIME(0.8F),
+		ICE(0.98F);
 
-		public final double value;
+		public final float value;
 
-		Slipperiness(double value) {
+		Slipperiness(float value) {
 			this.value = value;
 		}
 	}
