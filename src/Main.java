@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class Main {
 	public static final double px = 0.0625;
@@ -46,20 +47,112 @@ public class Main {
 			e.printStackTrace();
 		}
 
+		/*Jump pb = null;
+		int pbRun = 0;
+		for (int i = 0; i < 15; i++) {
+			System.out.println(i + " Run Ticks");
+			Movement movement = new Movement()
+					                    .move(i, false, true, true)
+					                    .move(1, true, false, true);
+			Jump jump = new Jump(movement.velX, true, false, false, 0, 0);
+			jump.movementMultiplier = Movement.MovementMultipliers.SPRINTING;
+			jump.calculate();
+			if (jump.jumpsFound && (pb == null || jump.xPB + Jump.px < pb.xPB + Jump.px)) {
+				pb = jump;
+				pbRun = i;
+			}
+			System.out.println();
+		}
+		System.out.println();
+		System.out.println();
+		System.out.println(pbRun);
+		if (pb != null)
+			pb.calculate();
 
-		Vec3 vel = new Vec3();
+		Movement movement = new Movement()
+				                    .move(40, false, true, true)
+				                    .resetPos()
+				                    .move(1, true, false, true)
+				                    .jump(true, false, false)
+				                    .moveAir(11, true, false, true);
+		System.out.println(movement.lastX+0.6F);*/
+
+
+		/*Vec3 vel = new Vec3();
 		TickList.Input.JumpMovementFactor factor = new TickList.Input.JumpMovementFactor();
 
 		Vec3 pos = TickList.Input.fromInputString("WPJ", 0)
 		                         .updatePosWithVel(new Vec3(), vel, factor);
 
-		TickList.Input input = TickList.Input.fromInputString("WP", 0);
+		TickList.Input input = TickList.Input.fromInputString("WPA", 45);
 		input.onGround = false;
 		for (int i = 0; i < 10; i++) {
 			input.updatePosWithVel(pos, vel, factor);
 		}
+		System.out.println(pos);*/
 
+		Vec3 vel = TickList.findVel(
+				new Vec3(0, 0, 1),
+				(Vec3 velocity) -> {
+					Vec3 pos = TickList.getFinalPos(
+							velocity.mult(-1),
+							TickList.fromInputString("SJ", 0, 1),
+							TickList.fromInputString("S", 0, 11).setOnGround(false),
+							TickList.fromInputString("S", 0, 1),
+							TickList.fromInputString("WPJ", 0, 1),
+							TickList.fromInputString("WPA", 45, 10).setOnGround(false)
+					);
+					double len = pos.z + 0.6F;
+					return Double.compare(2.375 + 1.2, len);
+				}
+		);
+
+		System.out.println(vel.z);
+		List<TickList.TickListInput> inputs = TickList.findInputs(0.0846385499639463, 8, true);
+		System.out.println(inputs);
+
+		Vec3 veltest = new Vec3();
+		TickList.getFinalPos(veltest, inputs.toArray(new TickList.TickListInput[0]));
+		System.out.println(veltest);
+
+		System.out.println(vel);
+
+		Vec3 pos = TickList.getFinalPos(
+				veltest.mult(-1),
+				TickList.fromInputString("SJ", 0, 1),
+				TickList.fromInputString("S", 0, 11).setOnGround(false),
+				TickList.fromInputString("WP", 0, 1),
+				TickList.fromInputString("WPJ", 0, 1),
+				TickList.fromInputString("WPA", 45, 10).setOnGround(false)
+		);
 		System.out.println(pos);
+
+		/*Vec3 vel2 = new Vec3();
+		TickList.getFinalPos(
+				vel2,
+				TickList.fromInputString("WJ", 180, 1),
+				TickList.fromInputString("W", 180, 6).setOnGround(false),
+				TickList.fromInputString("WP", 180, 5).setOnGround(false)
+		);
+		System.out.println(vel2);
+
+		Vec3 pos2 = TickList.getFinalPos(
+				vel2,
+				TickList.fromInputString("WP", 180, 1),
+				TickList.fromInputString("WPJ", 0, 1),
+				TickList.fromInputString("WPA", 45, 10).setOnGround(false)
+		);
+		System.out.println(pos2);*/
+
+		/*Vec3 pos2 = TickList.getFinalPos(
+				TickList.TickListInput.fromInputString("SJ", 0, 1),
+				TickList.TickListInput.fromInputString("S", 0, 11).setOnGround(false),
+				null,
+				TickList.TickListInput.fromInputString("S", 0, 1),
+				TickList.TickListInput.fromInputString("WPJA", 0, 1),
+				TickList.TickListInput.fromInputString("WP", 0, 10).setOnGround(false)
+		);
+		System.out.println(pos2);*/
 	}
 
 	public static void calculate() {

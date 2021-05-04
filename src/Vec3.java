@@ -26,4 +26,11 @@ public class Vec3 {
 	public String toString() {
 		return "[x: " + this.x + ", y: " + this.y + ", z: " + this.z + "]";
 	}
+
+	public Vec3 mult(double value) {
+		this.x *= value;
+		this.y *= value;
+		this.z *= value;
+		return this;
+	}
 }
