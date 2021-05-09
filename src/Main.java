@@ -67,15 +67,14 @@ public class Main {
 		System.out.println();
 		System.out.println(pbRun);
 		if (pb != null)
-			pb.calculate();
+			pb.calculate();*/
 
-		Movement movement = new Movement()
-				                    .move(40, false, true, true)
-				                    .resetPos()
-				                    .move(1, true, false, true)
-				                    .jump(true, false, false)
-				                    .moveAir(11, true, false, true);
-		System.out.println(movement.lastX+0.6F);*/
+		/*Movement movement1 = new Movement()
+				                     .move(50, false, true, false)
+				                     .move(1, true, false, false);
+		Jump jump = new Jump(movement1.velX, false, false, false, 0, 0);
+		jump.movementMultiplier = Movement.MovementMultipliers.SPRINTING;
+		jump.calculate();*/
 
 
 		/*Vec3 vel = new Vec3();
@@ -96,19 +95,18 @@ public class Main {
 				(Vec3 velocity) -> {
 					Vec3 pos = TickList.getFinalPos(
 							velocity.mult(-1),
-							TickList.fromInputString("SJ", 0, 1),
-							TickList.fromInputString("S", 0, 11).setOnGround(false),
-							TickList.fromInputString("S", 0, 1),
+							TickList.fromInputString("", 0, 1),
+							TickList.fromInputString("WP", 0, 1),
 							TickList.fromInputString("WPJ", 0, 1),
-							TickList.fromInputString("WPA", 45, 10).setOnGround(false)
+							TickList.fromInputString("WP", 0, 10).setOnGround(false)
 					);
 					double len = pos.z + 0.6F;
-					return Double.compare(2.375 + 1.2, len);
+					return Double.compare(2.25 + 1.2, len);
 				}
 		);
 
 		System.out.println(vel.z);
-		List<TickList.TickListInput> inputs = TickList.findInputs(0.0846385499639463, 8, true);
+		List<TickList.TickListInput> inputs = TickList.findInputs(vel.z, 3, true);
 		System.out.println(inputs);
 
 		Vec3 veltest = new Vec3();
@@ -119,11 +117,10 @@ public class Main {
 
 		Vec3 pos = TickList.getFinalPos(
 				veltest.mult(-1),
-				TickList.fromInputString("SJ", 0, 1),
-				TickList.fromInputString("S", 0, 11).setOnGround(false),
+				TickList.fromInputString("", 0, 1),
 				TickList.fromInputString("WP", 0, 1),
 				TickList.fromInputString("WPJ", 0, 1),
-				TickList.fromInputString("WPA", 45, 10).setOnGround(false)
+				TickList.fromInputString("WP", 0, 10).setOnGround(false)
 		);
 		System.out.println(pos);
 

@@ -4,7 +4,7 @@ public class Jump {
 	public static final double px = 0.0625;
 	public static final double playerWidth = 0.6;
 	public static final double yLimit = -255;
-	public static final boolean debug = false;
+	public static final boolean debug = true;
 	public double x, y;
 	public int pxDist;
 	public double xPB = Double.MAX_VALUE, yPB;
@@ -91,10 +91,15 @@ public class Jump {
 
 			if (offset > 0 && offset < px && offset < minOffset) {
 				jumpsFound = true;
+				double vel = velY;
+				vel = (vel - 0.08) * 0.98;
+				if (Math.abs(vel) < 0.005) vel = 0;
+
 				if (debug) {
 					System.out.println(" ");
-					System.out.println("Poss by: " + String.format("%,.16f", offset));
-					System.out.println(pxDist + "px (" + visualDist + "b) Tier " + -(airtime - 11) + "(" + y + "b)");
+					System.out.println("Poss by: " + String.format(Locale.US, "%,.16f", offset));
+					System.out.println(pxDist + "px (" + visualDist + "b) Tier " + -(airtime - 11) + " (" + y + " - " + (y + vel) + ")");
+					System.out.println(Math.floor(y));
 				}
 			}
 			if (offset < xPB) {
