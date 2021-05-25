@@ -31,7 +31,7 @@ public class Main {
 	static int slowness;                            //Slowness effect
 	static boolean strafe45 = false;                    //Use 45 strafe (true/false)
 	static boolean halfAngle = false;                  //if 45strafe is on, multiply speed by 1.000048
-	static double boundary = 0.003;                   // Every jump must be possible by less than what you put that variable to (more than 0.0625 is every tier)
+	static double boundary = 0.002;                   // Every jump must be possible by less than what you put that variable to (more than 0.0625 is every tier)
 	static double x = initialSpeed;
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	static int pxDist = 1;
@@ -47,15 +47,30 @@ public class Main {
 			e.printStackTrace();
 		}
 
+		/*Movement movement = new Movement()
+				                    .jump(true, false, false, false)
+				                    .moveAir(-7, false, false, false)
+				                    .moveAir(-4, true, false, false)
+				                    .move(-1, true, false, false)
+				                    .jump(false, true, false, false)
+				                    .moveAir(11, true, false, true);
+		System.out.println(movement.velX);
+		Jump jump = new Jump(movement.velX, true, true, true, 0, 0);
+		jump.calculate();*/
+
 		/*Jump pb = null;
 		int pbRun = 0;
-		for (int i = 0; i < 15; i++) {
+		for (int i = 1; i < 11; i++) {
 			System.out.println(i + " Run Ticks");
 			Movement movement = new Movement()
-					                    .move(i, false, true, true)
-					                    .move(1, true, false, true);
-			Jump jump = new Jump(movement.velX, true, false, false, 0, 0);
-			jump.movementMultiplier = Movement.MovementMultipliers.SPRINTING;
+					.jump(true, false, false, false)
+					.moveAir(-7, false, false, false)
+					.moveAir(-4, true, false, false)
+					.move(-1, true, false, false)
+					.jump(false, true, false, false)
+					.moveAir(11, true, false, true);
+			System.out.println(movement.velX);
+			Jump jump = new Jump(movement.velX, true, true, true, 0, 0);
 			jump.calculate();
 			if (jump.jumpsFound && (pb == null || jump.xPB + Jump.px < pb.xPB + Jump.px)) {
 				pb = jump;
@@ -69,10 +84,11 @@ public class Main {
 		if (pb != null)
 			pb.calculate();*/
 
+
 		/*Movement movement1 = new Movement()
 				                     .move(50, false, true, false)
 				                     .move(1, true, false, false);
-		Jump jump = new Jump(movement1.velX, false, false, false, 0, 0);
+		Jump jump = new Jump(0.31134, true, false, true, 0, 0);
 		jump.movementMultiplier = Movement.MovementMultipliers.SPRINTING;
 		jump.calculate();*/
 
@@ -96,17 +112,16 @@ public class Main {
 					Vec3 pos = TickList.getFinalPos(
 							velocity.mult(-1),
 							TickList.fromInputString("", 0, 1),
-							TickList.fromInputString("WP", 0, 1),
 							TickList.fromInputString("WPJ", 0, 1),
 							TickList.fromInputString("WP", 0, 10).setOnGround(false)
 					);
 					double len = pos.z + 0.6F;
-					return Double.compare(2.25 + 1.2, len);
+					return Double.compare(1.875 + 1.2, len);
 				}
 		);
 
 		System.out.println(vel.z);
-		List<TickList.TickListInput> inputs = TickList.findInputs(vel.z, 3, true);
+		List<TickList.TickListInput> inputs = TickList.findInputs(vel.z, 6, true);
 		System.out.println(inputs);
 
 		Vec3 veltest = new Vec3();
@@ -115,14 +130,40 @@ public class Main {
 
 		System.out.println(vel);
 
+		Vec3 veltest2 = veltest.copy();
+		Vec3 speed = TickList.getFinalSpeed(
+				veltest2.mult(-1),
+				new Vec3(),
+				TickList.fromInputString("", 0, 1),
+				TickList.fromInputString("WPJ", 0, 1),
+				TickList.fromInputString("WP", 0, 11).setOnGround(false)
+		);
+		System.out.println(speed);
+		System.out.println(veltest2);
+
+
 		Vec3 pos = TickList.getFinalPos(
 				veltest.mult(-1),
 				TickList.fromInputString("", 0, 1),
-				TickList.fromInputString("WP", 0, 1),
 				TickList.fromInputString("WPJ", 0, 1),
-				TickList.fromInputString("WP", 0, 10).setOnGround(false)
+				TickList.fromInputString("WP", 0, 10).setOnGround(false),
+				null,
+				TickList.fromInputString("WP", 0, 1).setOnGround(false),
+				TickList.fromInputString("WPJ", 0, 1),
+				TickList.fromInputString("WP", 0, 5).setOnGround(false)
 		);
-		System.out.println(pos);
+		System.out.println(pos.z + 0.6F);
+
+		Jump j = new Jump(0.24756861051441126, true, false, true, 0, 0);
+		j.calculate();
+
+		/*Vec3 pos = TickList.getFinalPos(
+				TickList.fromInputString("J", 0, 1),
+				TickList.fromInputString("WP", 0, 11).setOnGround(false),
+				TickList.fromInputString("WPJ", 0, 1),
+				TickList.fromInputString("WPJ", 0, 11).setOnGround(false),
+				TickList.fromInputString("WPJ", 0, 1).setOnGround(false)
+		);*/
 
 		/*Vec3 vel2 = new Vec3();
 		TickList.getFinalPos(

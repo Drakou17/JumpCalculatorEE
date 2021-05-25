@@ -30,6 +30,8 @@ public class Movement {
 	}
 
 	public Movement move(int ticks, boolean sprint, boolean sneak, boolean strafe) {
+		currentSlipperiness = Slipperiness.BLOCK;
+
 		double movementMultiplier = 1;
 		if (sprint) movementMultiplier *= MovementMultipliers.SPRINTING;
 		if (sneak) movementMultiplier *= MovementMultipliers.SNEAKING;
@@ -37,13 +39,13 @@ public class Movement {
 		if (!strafe) movementMultiplier *= StrafingMultipliers.DEFAULT;
 		else if (sneak) movementMultiplier *= StrafingMultipliers.SNEAK_STRAFE;
 
-		for (int i = 0; i < ticks; i++) {
+		for (int i = 0; i < Math.abs(ticks); i++) {
 			beforeNext();
 
 			double currSlip = 0.6 / currentSlipperiness.value;
 			double acceleration = 0.1 * movementMultiplier * potionMultiplier * currSlip * currSlip * currSlip;
 
-			velX = getMomentumX() + acceleration;
+			velX = getMomentumX() + acceleration * Math.signum(ticks);
 			x += velX;
 
 			prepareNext();
@@ -52,8 +54,7 @@ public class Movement {
 	}
 
 	public Movement moveAir(int ticks, boolean sprint, boolean sneak, boolean strafe) {
-		if (currentSlipperiness != Slipperiness.AIR)
-			currentSlipperiness = Slipperiness.AIR;
+		currentSlipperiness = Slipperiness.AIR;
 
 		double movementMultiplier = 1;
 		if (sprint) movementMultiplier *= MovementMultipliers.SPRINTING;
@@ -63,12 +64,12 @@ public class Movement {
 		else if (sneak) movementMultiplier *= StrafingMultipliers.SNEAK_STRAFE;
 
 
-		for (int i = 0; i < ticks; i++) {
+		for (int i = 0; i < Math.abs(ticks); i++) {
 			beforeNext();
 
 			double acceleration = 0.02 * movementMultiplier;
 
-			velX = getMomentumX() + acceleration;
+			velX = getMomentumX() + acceleration * Math.signum(ticks);
 			velY = (velY - 0.08) * 0.98;
 			if (Math.abs(velY) < 0.005)
 				velY = 0;
@@ -81,8 +82,10 @@ public class Movement {
 		return this;
 	}
 
-	public Movement jump(boolean sprint, boolean sneak, boolean strafe) {
+	public Movement jump(boolean backwards, boolean sprint, boolean sneak, boolean strafe) {
 		beforeNext();
+
+		currentSlipperiness = Slipperiness.BLOCK;
 
 		double movementMultiplier = 1;
 		if (sprint) movementMultiplier *= MovementMultipliers.SPRINTING;
@@ -95,7 +98,7 @@ public class Movement {
 		double acceleration = 0.1 * movementMultiplier * potionMultiplier * currSlip * currSlip * currSlip;
 		if (sprint) acceleration += 0.2;
 
-		velX = getMomentumX() + acceleration;
+		velX = getMomentumX() + acceleration * (backwards ? -1 : 1);
 		velY = 0.42;
 		x += velX;
 		y += velY;

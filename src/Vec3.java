@@ -33,4 +33,8 @@ public class Vec3 {
 		this.z *= value;
 		return this;
 	}
+
+	public Vec3 sub(Vec3 vec3) {
+		return add(vec3.copy().mult(-1));
+	}
 }

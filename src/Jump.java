@@ -3,7 +3,7 @@ import java.util.Locale;
 public class Jump {
 	public static final double px = 0.0625;
 	public static final double playerWidth = 0.6;
-	public static final double yLimit = -255;
+	public static final double yLimit = -256;
 	public static final boolean debug = true;
 	public double x, y;
 	public int pxDist;
@@ -18,7 +18,7 @@ public class Jump {
 	public double potionMultiplier;
 	public double velX, velY;
 	public double drag;
-	public double minOffset = 0.003;
+	public double minOffset = 0.002;
 	public boolean jumpsFound = false;
 	public double movementMultiplier = Movement.MovementMultipliers.SPRINTING;
 
@@ -67,6 +67,7 @@ public class Jump {
 					acceleration = 0.02 * movementMultiplier * Movement.StrafingMultipliers.DEFAULT;
 				}
 
+
 				velX = velX * drag + acceleration;
 				velY = (velY - 0.08) * 0.98;
 				if (Math.abs(velY) < 0.005)
@@ -98,8 +99,8 @@ public class Jump {
 				if (debug) {
 					System.out.println(" ");
 					System.out.println("Poss by: " + String.format(Locale.US, "%,.16f", offset));
-					System.out.println(pxDist + "px (" + visualDist + "b) Tier " + -(airtime - 11) + " (" + y + " - " + (y + vel) + ")");
-					System.out.println(Math.floor(y));
+					System.out.println(pxDist + "px (" + visualDist + "b) Tier " + -(airtime - 11) + " Airtime " + airtime + " (" + y + " - " + (y + vel) + ")");
+					/*System.out.println(Math.floor(y));*/
 				}
 			}
 			if (offset < xPB) {

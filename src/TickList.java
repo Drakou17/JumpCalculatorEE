@@ -7,11 +7,16 @@ public class TickList {
 	public static ArrayList<TickListInput> inputs = new ArrayList<>();
 
 	private static List<TickListInput> possibleInputs = Arrays.asList(
-			new TickListInput(true, false, false, false, true, false, false, 0, 1),
-			new TickListInput(true, false, false, false, false, false, false, 0, 1),
-			new TickListInput(false, false, true, false, false, false, false, 0, 1),
-			new TickListInput(true, false, false, false, false, true, false, 0, 1),
-			new TickListInput(false, false, true, false, false, true, false, 0, 1)
+			TickListInput.fromInputString("WP", 0, 1),
+			TickListInput.fromInputString("WAP", 0, 1),
+			TickListInput.fromInputString("W", 0, 1),
+			TickListInput.fromInputString("WA", 0, 1),
+			TickListInput.fromInputString("S", 0, 1),
+			TickListInput.fromInputString("SA", 0, 1),
+			TickListInput.fromInputString("WN", 0, 1),
+			TickListInput.fromInputString("WAN", 0, 1),
+			TickListInput.fromInputString("SN", 0, 1),
+			TickListInput.fromInputString("SAN", 0, 1)
 	);
 
 	public static Vec3 getFinalPos(TickListInput... inputs) {
@@ -32,6 +37,32 @@ public class TickList {
 			input.updatePosWithVel(pos, vel, factor);
 		}
 		return pos;
+	}
+
+	public static Vec3 getFinalSpeed(Vec3 v, Vec3 p, TickListInput... in) {
+		Vec3 vel = v.copy();
+		Vec3 pos = p.copy();
+		TickListInput[] inputs = TickListInput.copy(in);
+
+		if (inputs.length == 0) return null;
+		TickListInput lastInput = inputs[inputs.length - 1].copy();
+		lastInput.count = 1;
+		if (inputs[inputs.length - 1].count == 1)
+			System.arraycopy(inputs, 0, inputs, 0, inputs.length - 1);
+		else
+			inputs[inputs.length - 1].count--;
+
+		Input.JumpMovementFactor factor = new Input.JumpMovementFactor();
+		for (TickListInput input : inputs) {
+			if (input == null) {
+				pos = new Vec3();
+				continue;
+			}
+			input.updatePosWithVel(pos, vel, factor);
+		}
+		Vec3 firstPos = pos.copy();
+		lastInput.updatePosWithVel(pos, vel, factor);
+		return pos.copy().sub(firstPos);
 	}
 
 	private static double getVelOfInputs(int[] inputs) {
@@ -127,7 +158,9 @@ public class TickList {
 
 	private static boolean isValidInputs(int[] inputs) {
 		for (int i = 0; i < inputs.length - 1; i++) {
-			if (inputs[i] == 0 && inputs[i + 1] == 1)
+			if (inputs[i] == -1 || inputs[i + 1] == -1) continue;
+			TickListInput next = possibleInputs.get(inputs[i + 1]);
+			if (possibleInputs.get(inputs[i]).SPRINT && !next.SPRINT && next.W && !next.SNEAK)
 				return false;
 		}
 		return true;
@@ -143,6 +176,14 @@ public class TickList {
 		public TickListInput(boolean W, boolean A, boolean S, boolean D, boolean SPRINT, boolean SNEAK, boolean JUMP, float YAW, int count) {
 			super(W, A, S, D, SPRINT, SNEAK, JUMP, YAW);
 			this.count = count;
+		}
+
+		public static TickListInput[] copy(TickListInput[] arr) {
+			TickListInput[] inputs = new TickListInput[arr.length];
+			for (int i = 0; i < inputs.length; i++) {
+				inputs[i] = arr[i].copy();
+			}
+			return inputs;
 		}
 
 		public static TickListInput fromInputString(String inputString, float yaw, int count) {
@@ -172,6 +213,18 @@ public class TickList {
 		public TickListInput setOnGround(boolean onGround) {
 			super.setOnGround(onGround);
 			return this;
+		}
+
+		@Override
+		public TickListInput copy() {
+			TickListInput input = new TickListInput(this.W, this.A, this.S, this.D, this.SPRINT, this.SNEAK, this.JUMP, this.YAW, this.count);
+			input.inLava = this.inLava;
+			input.inWater = this.inWater;
+			input.inCobweb = this.inCobweb;
+			input.onLadder = this.onLadder;
+			input.onGround = this.onGround;
+			input.slipperiness = this.slipperiness;
+			return input;
 		}
 	}
 
@@ -401,6 +454,17 @@ public class TickList {
 			}
 
 			return pos;
+		}
+
+		public Input copy() {
+			Input input = new Input(this.W, this.A, this.S, this.D, this.SPRINT, this.SNEAK, this.JUMP, this.YAW);
+			input.inLava = this.inLava;
+			input.inWater = this.inWater;
+			input.inCobweb = this.inCobweb;
+			input.onLadder = this.onLadder;
+			input.onGround = this.onGround;
+			input.slipperiness = this.slipperiness;
+			return input;
 		}
 
 		@Override
